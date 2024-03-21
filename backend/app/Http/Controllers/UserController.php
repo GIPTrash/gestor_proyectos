@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UserController extends Controller
@@ -13,20 +14,13 @@ class UserController extends Controller
         return response()->json(User::all(), Response::HTTP_OK);
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'first' => 'required|string|max:255',
-            'last' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ]);
-
         $user = User::create([
-            'first' => $request->first,
-            'last' => $request->last,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'first_name' => $request->first_name,
+            'last_name'  => $request->last_name,
+            'email'      => $request->email,
+            'password'   => bcrypt($request->password),
         ]);
 
         return response()->json($user, Response::HTTP_CREATED);
@@ -42,21 +36,18 @@ class UserController extends Controller
         return response()->json($user, Response::HTTP_OK);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $user = User::find($id);
         if (!$user) {
             return response()->json(['message' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $request->validate([
-            'first' => 'sometimes|string|max:255',
-            'last' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $id,
-            'password' => 'sometimes|min:6',
-        ]);
-
-        $user->update($request->only(['first', 'last', 'email', 'password']));
+        $data = $request->only(['first_name', 'last_name', 'email', 'password']);
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+        $user->update($data);
 
         return response()->json($user, Response::HTTP_OK);
     }
