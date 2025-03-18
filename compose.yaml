@@ -11,8 +11,8 @@ services:
     ports:
       - ${MYSQL_PORT}:3306
     volumes:
-      - ./docker/volumes/mysql/data:/var/lib/mysql
-      - ./docker/volumes/mysql/backups:/backups
+      - ./docker/volumes/mysql/data:/var/lib/mysql:rw
+      - ./docker/volumes/mysql/backups:/backups:rw
 
   dragonfly:
     restart: ${RESTART:-no}
@@ -28,8 +28,8 @@ services:
     ports:
       - "${DRAGONFLY_PORT:-6379}:6379"
     volumes:
-      - ./docker/volumes/dragonfly/data:/data
-      - ./docker/volumes/dragonfly/backups:/backups
+      - ./docker/volumes/dragonfly/data:/data:rw
+      - ./docker/volumes/dragonfly/backups:/backups:rw
 
   mailhog:
     restart: ${RESTART:-no}
