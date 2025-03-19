@@ -6,15 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * Los atributos que se asignan masivamente.
      *
-     * @var list<string>
+     * @var array
      */
     protected $fillable = [
         'first_name',
@@ -26,7 +27,7 @@ class User extends Authenticatable
     /**
      * Los atributos que se ocultan para la serialización.
      *
-     * @var list<string>
+     * @var array
      */
     protected $hidden = [
         'password',
@@ -35,10 +36,12 @@ class User extends Authenticatable
 
     /**
      * Casts para los atributos.
+     *
+     * @var array
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
     ];
 
     /**
@@ -53,6 +56,8 @@ class User extends Authenticatable
 
     /**
      * Mutator para formatear el primer nombre.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function firstName(): Attribute
     {
@@ -63,11 +68,25 @@ class User extends Authenticatable
 
     /**
      * Mutator para formatear el apellido.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
      */
     protected function lastName(): Attribute
     {
         return Attribute::make(
             set: fn($value) => ucfirst(strtolower($value))
+        );
+    }
+
+    /**
+     * Mutator para hashear la contraseña automáticamente.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => bcrypt($value)
         );
     }
 

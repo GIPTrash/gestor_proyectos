@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Response;
 
@@ -11,54 +12,28 @@ class UserController extends Controller
 {
     public function index()
     {
-        return response()->json(User::all(), Response::HTTP_OK);
+        return response()->json(UserResource::collection(User::all()), Response::HTTP_OK);
     }
 
     public function store(StoreUserRequest $request)
     {
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => $request->email,
-            'password'   => bcrypt($request->password),
-        ]);
-
-        return response()->json($user, Response::HTTP_CREATED);
+        $user = User::create($request->validated());
+        return response()->json(new UserResource($user), Response::HTTP_CREATED);
     }
 
-    public function show($id)
+    public function show(User $user)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
-        }
-
-        return response()->json($user, Response::HTTP_OK);
+        return response()->json(new UserResource($user), Response::HTTP_OK);
     }
 
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
-        }
-
-        $data = $request->only(['first_name', 'last_name', 'email', 'password']);
-        if (isset($data['password'])) {
-            $data['password'] = bcrypt($data['password']);
-        }
-        $user->update($data);
-
-        return response()->json($user, Response::HTTP_OK);
+        $user->update($request->validated());
+        return response()->json(new UserResource($user), Response::HTTP_OK);
     }
 
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        $user = User::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
-        }
-
         $user->delete();
         return response()->json(['message' => 'Usuario eliminado'], Response::HTTP_OK);
     }
