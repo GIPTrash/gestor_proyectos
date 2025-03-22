@@ -27,6 +27,7 @@ class UpdateUserRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($userId),
             ],
             'password'   => 'sometimes|min:6|confirmed',
+            'role'       => 'sometimes|in:user,admin', // Validación del rol
         ];
     }
 
@@ -41,6 +42,7 @@ class UpdateUserRequest extends FormRequest
             'email.unique'       => 'El email ya se encuentra registrado.',
             'password.min'       => 'La contraseña debe tener al menos 6 caracteres.',
             'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'role.in'            => 'El rol debe ser "user" o "admin".',
         ];
     }
 }

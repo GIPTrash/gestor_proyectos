@@ -19,6 +19,7 @@ class StoreUserRequest extends FormRequest
             'last_name'  => 'required|string|max:255',
             'email'      => 'required|email|unique:users,email',
             'password'   => 'required|min:6|confirmed',
+            'role'       => 'required|in:user,admin', // Validación del rol
         ];
     }
 
@@ -33,6 +34,8 @@ class StoreUserRequest extends FormRequest
             'password.required'    => 'La contraseña es obligatoria.',
             'password.min'         => 'La contraseña debe tener al menos 6 caracteres.',
             'password.confirmed'   => 'La confirmación de la contraseña no coincide.',
+            'role.required'        => 'El rol es obligatorio.',
+            'role.in'              => 'El rol debe ser "user" o "admin".',
         ];
     }
 }
