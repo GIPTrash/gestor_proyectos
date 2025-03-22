@@ -11,7 +11,7 @@ class Project extends Model
     use HasFactory, SoftDeletes;
 
     // Si el nombre de la tabla es distinto del plural del modelo, se especifica
-    protected $table = 'project';
+    protected $table = 'projects';
 
     // Atributos asignables
     protected $fillable = ['name', 'user_id'];
