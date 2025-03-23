@@ -10,7 +10,16 @@ Route::post('login', [UserController::class, 'login']);
 
 // Rutas protegidas mediante Sanctum
 Route::middleware('auth:sanctum')->group(function () {
-    // Excluimos el método store, ya que se usa el endpoint de register
+    // Rutas habituales de usuario (excluyendo 'store' ya que se usa 'register')
     Route::apiResource('users', UserController::class)->except(['store']);
+    // Endpoints para la relación many-to-many
+    Route::get('users/{user}/collaborative-projects', [UserController::class, 'getCollaborativeProjects']);
+    Route::post('users/{user}/collaborative-projects', [UserController::class, 'addCollaborativeProject']);
+    Route::delete('users/{user}/collaborative-projects/{project}', [UserController::class, 'removeCollaborativeProject']);
+    
     Route::apiResource('projects', ProjectController::class);
+    // Endpoints para la relación many-to-many
+    Route::get('projects/{project}/collaborators', [ProjectController::class, 'getCollaborators']);
+    Route::post('projects/{project}/collaborators', [ProjectController::class, 'addCollaborator']);
+    Route::delete('projects/{project}/collaborators/{user}', [ProjectController::class, 'removeCollaborator']);
 });

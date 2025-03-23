@@ -24,7 +24,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
-        'role', // Se agregó el rol
+        'role',
     ];
 
     /**
@@ -45,7 +45,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
-        'role'              => Role::class, // Casting al enum Role
+        'role'              => Role::class,
     ];
 
     /**
@@ -95,11 +95,20 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación: un usuario tiene muchos proyectos.
+     * Relación 1 a N: un usuario tiene muchos proyectos creados.
      */
     public function projects()
     {
         return $this->hasMany(\App\Models\Project::class);
+    }
+
+    /**
+     * Relación N a N: proyectos en los que el usuario participa como colaborador.
+     */
+    public function collaborativeProjects()
+    {
+        return $this->belongsToMany(\App\Models\Project::class, 'project_user', 'user_id', 'project_id')
+                    ->withTimestamps();
     }
 
     /**

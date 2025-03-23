@@ -17,10 +17,19 @@ class Project extends Model
     protected $fillable = ['name', 'user_id'];
 
     /**
-     * Relación: un proyecto pertenece a un usuario.
+     * Relación 1 a N: un proyecto pertenece a un usuario (creador).
      */
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
+    }
+
+    /**
+     * Relación N a N: colaboradores del proyecto.
+     */
+    public function collaborators()
+    {
+        return $this->belongsToMany(\App\Models\User::class, 'project_user', 'project_id', 'user_id')
+                    ->withTimestamps();
     }
 }
