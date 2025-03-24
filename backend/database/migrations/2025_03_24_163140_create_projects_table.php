@@ -7,21 +7,30 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ejecuta las migraciones.
+     *
+     * @return void
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('project', function (Blueprint $table) {
             $table->id();
+            $table->string('name', 255);
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            // Definimos la clave foránea a la tabla users
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Revierte las migraciones.
+     *
+     * @return void
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('project');
     }
 };

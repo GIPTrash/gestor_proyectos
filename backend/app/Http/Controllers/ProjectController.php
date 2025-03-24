@@ -2,48 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
-use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        return response()->json(Project::all(), Response::HTTP_OK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        //
+        $project = Project::create($request->validated());
+        return response()->json($project, Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Project $project)
+    public function show($id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) {
+            return response()->json(['message' => 'Proyecto no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($project, Response::HTTP_OK);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, $id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) {
+            return response()->json(['message' => 'Proyecto no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $project->update($request->validated());
+        return response()->json($project, Response::HTTP_OK);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Project $project)
+    public function destroy($id)
     {
-        //
+        $project = Project::find($id);
+        if (!$project) {
+            return response()->json(['message' => 'Proyecto no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+
+        $project->delete();
+        return response()->json(['message' => 'Proyecto eliminado'], Response::HTTP_OK);
     }
 }
