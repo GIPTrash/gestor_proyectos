@@ -1,14 +1,14 @@
-import './App.css'
+import Layout from './layouts/Layout';
 
-function App() {
-
+const App = () => {
   return (
-    <>
-        <h1 className="text-3xl font-bold underline text-center text-blue-500">
-          Hello world!
-        </h1>
-    </>
-  )
-}
+    <Layout>
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">Contenido Principal</h2>
+        <p>Aquí va el contenido de la aplicación.</p>
+      </div>
+    </Layout>
+  );
+};
 
-export default App
+export default App;
