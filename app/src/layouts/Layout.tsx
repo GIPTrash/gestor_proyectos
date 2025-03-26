@@ -1,36 +1,25 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import Sidebar from '../components/layouts/SideBar';
 
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-blue-600 p-4 text-white">
         <h1 className="text-xl font-bold">Mi Aplicación</h1>
       </header>
-      {/* Contenedor principal */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 bg-gray-100 p-4">
-          <nav>
-            <ul>
-              <li className="mb-2"><a href="#">Inicio</a></li>
-              <li className="mb-2"><a href="#">Acerca de</a></li>
-              <li className="mb-2"><a href="#">Contacto</a></li>
-            </ul>
-          </nav>
-        </aside>
+        <Sidebar />
         {/* Contenido principal */}
         <main className="flex-1 p-4">
-          {children}
+          <Outlet />
         </main>
       </div>
       {/* Footer */}
       <footer className="bg-blue-600 p-4 text-white text-center">
-        © 2025 Mi Aplicación
+        © 2025 Gestor de proyectos
       </footer>
     </div>
   );

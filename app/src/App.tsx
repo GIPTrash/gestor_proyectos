@@ -1,13 +1,20 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './layouts/Layout';
+import Home from './pages/Home';
+import Projects from './pages/Projects';
 
 const App = () => {
   return (
-    <Layout>
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">Contenido Principal</h2>
-        <p>Aquí va el contenido de la aplicación.</p>
-      </div>
-    </Layout>
+    <BrowserRouter>
+      <Routes>
+        {/* Ruta padre con layout */}
+        <Route path="/" element={<Layout />}>
+          {/* Rutas hijas que se renderizarán en <Outlet /> */}
+          <Route index element={<Home />} />
+          <Route path="projects" element={<Projects />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
