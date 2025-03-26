@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Home: React.FC = () => {
+const Projects: React.FC = () => {
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Bienvenido a la página de proyectos</h2>
@@ -9,4 +9,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Projects;
